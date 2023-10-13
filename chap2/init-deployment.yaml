@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: init-deployment
+  name: init-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: init-deployment
+  template:
+    metadata:
+      labels:
+        app: init-deployment
+    spec:
+      containers:
+        - image: nginx:latest
+          name: init-deployment
+          ports:
+            - name: http
+              containerPort: 80

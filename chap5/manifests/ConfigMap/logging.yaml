@@ -1,0 +1,93 @@
+#apiVersion: v1
+#kind: ConfigMap
+#metadata:
+#  name: custom-solr-xml
+#data:
+#  log4j2.xml: |
+#    <?xml version="1.0" encoding="UTF-8"?>
+#    <!-- Configuration for asynchronous logging -->
+#    <Configuration monitorInterval="300">
+#      <Appenders>
+#        <Console name="STDOUT" target="SYSTEM_OUT">
+#          <PatternLayout>
+#            <Pattern>
+#              %maxLen{%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core}] %c{1.} %m%notEmpty{ =>%ex{short}}}{10240}%n
+#            </Pattern>
+#          </PatternLayout>
+#        </Console>
+#        <RollingRandomAccessFile
+#          name="MainLogFile"
+#          fileName="${sys:solr.log.dir}/solr.log"
+#          filePattern="${sys:solr.log.dir}/solr.log.%d{yyyy-MM-dd_HH}.gz" >
+#          <PatternLayout>
+#            <Pattern>
+#              %maxLen{%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core}] %c{1.} %m%notEmpty{ =>%ex{short}}}{10240}%n
+#            </Pattern>
+#          </PatternLayout>
+#          <Policies>
+#            <TimeBasedTriggeringPolicy />
+#          </Policies>
+#          <DefaultRolloverStrategy>
+#            <Delete basePath="%{sys:solr.log.dir}">
+#              <IfFileName glob="solr.log.*.gz" />
+#              <IfLastModified age="3d" />
+#            </Delete>
+#          </DefaultRolloverStrategy>
+#        </RollingRandomAccessFile>
+#        <RollingRandomAccessFile
+#          name="QueryFile"
+#          fileName="${sys:solr.log.dir}/query.log"
+#          filePattern="${sys:solr.log.dir}/query.log.%d{yyyy-MM-dd_HH}.gz" >
+#          <PatternLayout>
+#            <Pattern>
+#              %maxLen{%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p (%t) [%X{collection} %X{shard} %X{replica} %X{core} query] %c{1.} %m%notEmpty{ =>%ex{short}}}{10240}%n
+#            </Pattern>
+#          </PatternLayout>
+#          <Policies>
+#            <TimeBasedTriggeringPolicy />
+#          </Policies>
+#          <DefaultRolloverStrategy>
+#            <Delete basePath="${sys:solr.log.dir}">
+#              <IfFileName glob="query.log.*.gz" />
+#              <IfLastModified age="3d" />
+#            </Delete>
+#          </DefaultRolloverStrategy>
+#        </RollingRandomAccessFile>
+#        <RollingRandomAccessFile
+#          name="SlowLogFile"
+#          fileName="${sys:solr.log.dir}/solr_slow_requests.log"
+#          filePattern="${sys:solr.log.dir}/solr_slow_requests.log.%d{yyyy-MM-dd_HH}.gz" >
+#          <PatternLayout>
+#            <Pattern>
+#              %maxLen{%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p (%t) slow_query [%X{collection} %X{shard} %X{replica} %X{core} slow_query] %c{1.} %m%notEmpty{ =>%ex{short}}}{10240}%n
+#            </Pattern>
+#          </PatternLayout>
+#          <Policies>
+#            <TimeBasedTriggeringPolicy />
+#          </Policies>
+#          <DefaultRolloverStrategy>
+#            <Delete basePath="${sys:solr.log.dir}">
+#              <IfFileName glob="solr_slow_query.log.*.gz" />
+#              <IfLastModified age="3d" />
+#            </Delete>
+#          </DefaultRolloverStrategy>
+#        </RollingRandomAccessFile>
+#      </Appenders>
+#      <Loggers>
+#        <AsyncLogger name="org.apache.hadoop" level="warn"/>
+#        <AsyncLogger name="org.apache.solr.update.LoggingInfoStream" level="off"/>
+#        <AsyncLogger name="org.apache.zookeeper" level="warn"/>
+#        <AsyncLogger name="org.apache.solr.core.SolrCore.SlowRequest" level="info" additivity="false">
+#          <AppenderRef ref="SlowLogFile"/>
+#          <AppenderRef ref="STDOUT"/>
+#        </AsyncLogger>
+#        <AsyncLogger name="org.apache.solr.core.SolrCore.Request" level="info" additivity="false">
+#          <AppenderRef ref="QueryFile"/>
+#          <AppenderRef ref="STDOUT"/>
+#        </AsyncLogger>
+#        <AsyncRoot level="info">
+#          <AppenderRef ref="MainLogFile"/>
+#          <AppenderRef ref="STDOUT"/>
+#        </AsyncRoot>
+#      </Loggers>
+#    </Configuration>

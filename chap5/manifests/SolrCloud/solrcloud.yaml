@@ -1,0 +1,114 @@
+apiVersion: solr.apache.org/v1beta1
+kind: SolrCloud
+metadata:
+  name: example
+  namespace: solr
+spec:
+  availability:
+    podDisruptionBudget:
+      enabled: true
+      method: ClusterWide
+  busyBoxImage:
+    repository: library/busybox
+    tag: 1.28.0-glibc
+  customSolrKubeOptions:
+    podOptions:
+      resources:
+        limits:
+          cpu: 1
+          memory: 3Gi
+        requests:
+          cpu: 700m
+          memory: 500Mi
+      volumes:
+        - name: solr-logs
+          defaultContainerMount:
+            name: solr-logs
+            mountPath: /var/solr/logs
+          source:
+            emptyDir: {}
+    ingressOptions:
+      ingressClassName: nginx
+    #configMapOptions:
+      #providedConfigMap: "custom-solr-xml"
+  dataStorage:
+    persistent:
+      pvcTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 1Gi
+      reclaimPolicy: Retain
+  replicas: 2
+  solrAddressability:
+    commonServicePort: 80
+    external:
+      domainName: solr.com
+      method: Ingress
+      nodePortOverride: 80
+      useExternalAddress: true
+    podPort: 8983
+  solrImage:
+    repository: solr
+    tag: "9.3"
+  solrJavaMem: -Xms300m -Xmx300m
+  solrLogLevel: INFO
+  updateStrategy:
+    managed: {}
+    method: Managed
+  zookeeperRef:
+    provided:
+      adminServerService: {}
+      chroot: /
+      clientService: {}
+      config: {}
+      headlessService: {}
+      image:
+        pullPolicy: IfNotPresent
+        repository: pravega/zookeeper
+      maxUnavailableReplicas: 1
+      replicas: 1
+      zookeeperPodPolicy:
+        resources:
+          limits:
+            memory: 500Mi
+          requests:
+            cpu: 250m
+            memory: 500Mi
+status:
+  externalCommonAddress: http://solr-example-solrcloud.solr.com
+  internalCommonAddress: http://example-solrcloud-common.solr
+  podSelector: solr-cloud=example,technology=solr-cloud
+  readyReplicas: 2
+  replicas: 2
+  solrNodes:
+  - externalAddress: http://solr-example-solrcloud-0.solr.com
+    internalAddress: http://example-solrcloud-0.solr
+    name: example-solrcloud-0
+    nodeName: kind-control-plane
+    ready: true
+    scheduledForDeletion: false
+    specUpToDate: true
+    version: "9.3"
+  - externalAddress: http://solr-example-solrcloud-1.solr.com
+    internalAddress: http://example-solrcloud-1.solr
+    name: example-solrcloud-1
+    nodeName: kind-control-plane
+    ready: true
+    scheduledForDeletion: false
+    specUpToDate: true
+    version: "9.3"
+  - externalAddress: http://solr-example-solrcloud-2.solr.com
+    internalAddress: http://example-solrcloud-2.solr
+    name: example-solrcloud-2
+    nodeName: kind-control-plane
+    ready: true
+    scheduledForDeletion: false
+    specUpToDate: true
+    version: "9.3"
+  upToDateNodes: 2
+  version: "9.3"
+  zookeeperConnectionInfo:
+    chroot: /
+    externalConnectionString: N/A
+    internalConnectionString: example-solrcloud-zookeeper-0.example-solrcloud-zookeeper-headless.solr.svc.cluster.local:2181,example-solrcloud-zookeeper-1.example-solrcloud-zookeeper-headless.solr.svc.cluster.local:2181,example-solrcloud-zookeeper-2.example-solrcloud-zookeeper-headless.solr.svc.cluster.local:2181
