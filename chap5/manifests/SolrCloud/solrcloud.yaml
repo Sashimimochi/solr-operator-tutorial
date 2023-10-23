@@ -29,8 +29,8 @@ spec:
             emptyDir: {}
     ingressOptions:
       ingressClassName: nginx
-    #configMapOptions:
-      #providedConfigMap: "custom-solr-xml"
+    configMapOptions:
+      providedConfigMap: custom-solr-xml
   dataStorage:
     persistent:
       pvcTemplate:
@@ -50,7 +50,7 @@ spec:
     podPort: 8983
   solrImage:
     repository: solr
-    tag: "9.3"
+    tag: "9.4"
   solrJavaMem: -Xms300m -Xmx300m
   solrLogLevel: INFO
   updateStrategy:
@@ -89,7 +89,7 @@ status:
     ready: true
     scheduledForDeletion: false
     specUpToDate: true
-    version: "9.3"
+    version: "9.4"
   - externalAddress: http://solr-example-solrcloud-1.solr.com
     internalAddress: http://example-solrcloud-1.solr
     name: example-solrcloud-1
@@ -97,7 +97,7 @@ status:
     ready: true
     scheduledForDeletion: false
     specUpToDate: true
-    version: "9.3"
+    version: "9.4"
   - externalAddress: http://solr-example-solrcloud-2.solr.com
     internalAddress: http://example-solrcloud-2.solr
     name: example-solrcloud-2
@@ -105,9 +105,9 @@ status:
     ready: true
     scheduledForDeletion: false
     specUpToDate: true
-    version: "9.3"
+    version: "9.4"
   upToDateNodes: 2
-  version: "9.3"
+  version: "9.4"
   zookeeperConnectionInfo:
     chroot: /
     externalConnectionString: N/A

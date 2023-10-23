@@ -1,6 +1,6 @@
 CLUSTER_NAME=""
-TAG=9.3
-OPERATOR_VERSION=0.7.1
+TAG=9.4
+OPERATOR_VERSION=0.8.0
 NAMESPACE=solr
 
 install-repo:
@@ -16,7 +16,7 @@ deploy:
 #	127.0.0.1 example.solr.com
 	cat /etc/hosts
 	kubectl get all -n projectcontour
-	kubectl create -f https://solr.apache.org/operator/downloads/crds/v0.7.1/all-with-dependencies.yaml
+	kubectl create -f https://solr.apache.org/operator/downloads/crds/v$(OPERATOR_VERSION)/all-with-dependencies.yaml
 	helm install solr-operator apache-solr/solr-operator --version $(OPERATOR_VERSION) \
 		--create-namespace --namespace $(NAMESPACE)
 	kubectl create namespace kubernetes-dashboard
@@ -69,7 +69,7 @@ config:
 clean:
 #	kubectl delete -f manifests/ --recursive
 #	helm uninstall solr-operator -n $(NAMESPACE)
-#	kubectl delete -f https://solr.apache.org/operator/downloads/crds/v0.7.1/all-with-dependencies.yaml
+#	kubectl delete -f https://solr.apache.org/operator/downloads/crds/v$(OPERATOR_VERSION)/all-with-dependencies.yaml
 	kind delete cluster --name $(CLUSTER_NAME)
 	pkill -9 -f "kubectl proxy"
 
