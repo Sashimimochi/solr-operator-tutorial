@@ -1,0 +1,10 @@
+execution:
+  - concurrency: 200
+    hold-for: 5m
+    ramp-up: 30s
+    scenario: web_load
+
+scenarios:
+  web_load:
+    requests:
+      - http://host.docker.internal:8080/
