@@ -13,4 +13,3 @@ setup:
 	@make delete
 	kind create cluster
 	@make deploy
-
