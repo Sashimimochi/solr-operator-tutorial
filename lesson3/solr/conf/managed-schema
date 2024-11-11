@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schema name="example" version="1.6">
+    <field name="_version_" type="plong" indexed="false" stored="false" />
+    <field name="_root_" type="int" indexed="true" stored="false" docValues="false" />
+
+    <uniqueKey>id</uniqueKey>
+
+    <field name="id" type="int" indexed="true" stored="true" required="true" />
+    <field name="title" type="text_general" indexed="true" stored="true" />
+    <field name="content" type="text_general" indexed="true" stored="true" />
+
+    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0" />
+    <fieldType name="plong" class="solr.LongPointField" docValues="true" />
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" />
+</schema>

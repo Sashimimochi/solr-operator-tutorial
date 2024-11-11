@@ -1,0 +1,18 @@
+apiVersion: solr.apache.org/v1beta1
+kind: SolrPrometheusExporter
+metadata:
+  name: solr-exporter
+  namespace: solr
+spec:
+  customKubeOptions:
+    podOptions:
+      resources:
+        requests:
+          cpu: 300m
+          memory: 700Mi
+  solrReference:
+    cloud:
+      name: "example"
+  numThreads: 1
+  image:
+    tag: 9.7.0

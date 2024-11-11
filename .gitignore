@@ -1,2 +1,4 @@
 *.zip
-chap5/books.json
+books.json
+.vscode
+*.log
